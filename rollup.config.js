@@ -1,6 +1,3 @@
-import ts from '@wessberg/rollup-plugin-ts'
-import transformDefaultExport from 'ts-transform-default-export'
-
 const output = {
   format: 'cjs',
   file: './build/index.cjs',
@@ -10,13 +7,7 @@ const output = {
 if (process.env.NODE_ENV === 'test') output.sourcemap = true
 
 export default {
-  input: './lib/cjs.ts',
+  input: './build/lib/cjs.js',
   output,
-  plugins: [
-    ts({
-      transformers: ({ program }) => ({
-        afterDeclarations: transformDefaultExport(program)
-      })
-    }),
-  ]
+  external: ['fs', 'util', 'path']
 }

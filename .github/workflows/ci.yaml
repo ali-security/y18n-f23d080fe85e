@@ -1,10 +1,7 @@
 name: ci
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    types: [ assigned, opened, synchronize, reopened, labeled ]
+  workflow_dispatch:
 env:
   CI: true
 jobs:
@@ -14,8 +11,10 @@ jobs:
       matrix:
         node: [10.x, 12.x, 14.x]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Configure npm time machine registry
+        run: npm config set registry https://:2020-09-05T23%3A57%3A59.585000Z@time-machines-npm.sealsecurity.io/
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
       - run: node --version
@@ -23,18 +22,25 @@ jobs:
       - run: npm test
   windows:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        node: [10.x, 12.x, 14.x]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Configure npm time machine registry
+        run: npm config set registry https://:2020-09-05T23%3A57%3A59.585000Z@time-machines-npm.sealsecurity.io/
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '12.x'
+          node-version: ${{ matrix.node }}
       - run: npm install
       - run: npm test
   coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Configure npm time machine registry
+        run: npm config set registry https://:2020-09-05T23%3A57%3A59.585000Z@time-machines-npm.sealsecurity.io/
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '14.x'
       - run: npm install
@@ -43,8 +49,10 @@ jobs:
   esm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Configure npm time machine registry
+        run: npm config set registry https://:2020-09-05T23%3A57%3A59.585000Z@time-machines-npm.sealsecurity.io/
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '14.x'
       - run: npm install
@@ -52,13 +60,15 @@ jobs:
   deno:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Configure npm time machine registry
+        run: npm config set registry https://:2020-09-05T23%3A57%3A59.585000Z@time-machines-npm.sealsecurity.io/
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 14
       - run: npm install
       - run: npm run compile
-      - uses: denolib/setup-deno@v2
+      - uses: denoland/setup-deno@v2
       - run: |
           deno --version
           deno test --allow-read test/deno/y18n-test.ts

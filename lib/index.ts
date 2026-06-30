@@ -186,7 +186,7 @@ class Y18N {
 
     try {
       localeLookup = JSON.parse(shim.fs.readFileSync(languageFile, 'utf-8'))
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof SyntaxError) {
         err.message = 'syntax error in ' + languageFile
       }
